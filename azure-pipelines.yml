@@ -23,7 +23,7 @@ variables:
   - name: 'deploy_app'
     value: true
   - name: 'deploy_infra' 
-    value: true
+    value: false
   - name: 'slots'
     value: |
       [
@@ -94,50 +94,10 @@ stages:
         overrideParameters: '-webappName $(app_service_name) -sku S1 -os Windows -instanceCount 1 -slots $(slots)'
         deploymentMode: 'Incremental'
 
-- stage: DevRelease
-  displayName: Release to Dev
-  condition: eq(variables.deploy_app,true)
-  dependsOn: Build
-  jobs:
-  - deployment: dev
-    displayName: deploy to dev
-    environment: dev
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - template: release-steps.yml
-            parameters:
-              azure_service_connection: $(azure_service_connection)
-              app_service_name: $(app_service_name)
-              resource_group: $(resource_group)
-              environment: $(Environment.Name)
-              connection_string: $(testconnstr)
-
-- stage: TestRelease
-  displayName: Release to Test
-  condition: eq(variables.deploy_app,true)
-  dependsOn: Build
-  jobs:
-  - deployment: test
-    displayName: deploy to test
-    environment: test
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - template: release-steps.yml
-            parameters:
-              azure_service_connection: $(azure_service_connection)
-              app_service_name: $(app_service_name)
-              resource_group: $(resource_group)
-              environment: $(Environment.Name)
-              connection_string: $(testconnstr)
-          
 - stage: ProdRelease
   displayName: Release to Production
   condition: eq(variables.deploy_app,true)
-  dependsOn: TestRelease
+  dependsOn: Build
   jobs:
   - deployment: prod
     displayName: swap production slot
