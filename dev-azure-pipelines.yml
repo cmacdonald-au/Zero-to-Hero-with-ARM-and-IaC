@@ -82,7 +82,7 @@ stages:
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
         deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'victoviriya_$(env_connection)'
+        azureResourceManagerConnection: 'victorviriya_$(env_connection)'
         subscriptionId: '$(subscription_id)'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(resource_group)'
@@ -107,7 +107,7 @@ stages:
           steps:
           - template: release-steps.yml
             parameters:
-              azure_service_connection: 'victoviriya_$(env_connection)'
+              azure_service_connection: 'victorviriya_$(env_connection)'
               app_service_name: $(app_service_name)
               resource_group: $(resource_group)
               environment: $(Environment.Name)
@@ -127,7 +127,7 @@ stages:
           steps:
           - template: release-steps.yml
             parameters:
-              azure_service_connection: 'victoviriya_$(env_connection)'
+              azure_service_connection: 'victorviriya_$(env_connection)'
               app_service_name: $(app_service_name)
               resource_group: $(resource_group)
               environment: $(Environment.Name)
